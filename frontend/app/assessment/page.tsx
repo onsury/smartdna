@@ -1,5 +1,12 @@
 'use client'
-import { useState } from 'react'
+'use client';  // Add this at the very top
+
+import React from 'react';  // Remove the destructuring
+import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+
+// Remove this line - you don't need useEffect from react import
+// import React, { useState, useEffect, useRef } from 'react';
 
 export default function Assessment() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
