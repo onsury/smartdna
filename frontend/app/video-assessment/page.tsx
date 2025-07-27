@@ -1,7 +1,9 @@
+export const dynamic = 'force-dynamic';
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 // Assessment configurations
 const ASSESSMENT_TYPES = {
@@ -211,7 +213,8 @@ const ASSESSMENT_TYPES = {
   }
 };
 
-export default function VideoAssessment() {
+// Main component wrapped for Suspense
+function VideoAssessmentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const assessmentType = searchParams.get('type') || 'express';
@@ -293,7 +296,10 @@ export default function VideoAssessment() {
     if (currentRound < assessment.rounds.length - 1) {
       if (assessment.type === 'multi-day') {
         // For multi-day assessments, show completion message
-        alert(`Day $(currentRoundData as any).day assessment complete! Please return tomorrow for Day ${(currentRoundData as any).day + 1}.`);
+        const roundData = currentRoundData as any;
+        if (roundData.day) {
+          alert(`Day ${roundData.day} assessment complete! Please return tomorrow for Day ${roundData.day + 1}.`);
+        }
         router.push('/platform');
       } else {
         // For single session, continue to next round
@@ -349,8 +355,8 @@ export default function VideoAssessment() {
           <div className="mt-4">
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-gray-600">
-                {assessment.type === 'multi-day' 
-                  ? `Day $(currentRoundData as any).day of ${assessment.rounds.length}` 
+                {assessment.type === 'multi-day' && 'day' in currentRoundData
+                  ? `Day ${(currentRoundData as any).day} of ${assessment.rounds.length}` 
                   : `Round ${currentRound + 1} of ${assessment.rounds.length}`}
               </span>
               <span className="text-sm text-gray-600">
@@ -485,5 +491,14 @@ export default function VideoAssessment() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Export with Suspense wrapper
+export default function VideoAssessment() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <VideoAssessmentContent />
+    </Suspense>
   );
 }
