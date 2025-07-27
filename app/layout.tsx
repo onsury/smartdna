@@ -1,5 +1,4 @@
 import './globals.css';
-import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Link from 'next/link';
@@ -143,8 +142,7 @@ export default function RootLayout({
               <div>
                 <h4 className="font-bold mb-4">Contact</h4>
                 <ul className="space-y-2 text-gray-400">
-                  <li>Email: hello@starthub.media</li>
-                  <li>Phone: +91 98765 43210</li>
+                  <li>Email: starthubbusiness@gmail.com</li>
                   <li>
                     <Link href="/book-demo" className="hover:text-white transition">
                       Book a Demo
@@ -154,10 +152,10 @@ export default function RootLayout({
               </div>
             </div>
             
-            {/* Copyright - Only Once */}
+            {/* Copyright - Only at Bottom */}
             <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
               <p>© 2025 StartHub Media AI Pvt. Ltd. All rights reserved.</p>
-              <p className="mt-2">Revolutionizing organizational content with CorePersonaDNA™</p>
+              <p className="mt-2">Revolutionizing organizational content with Deep Neural Assessment™</p>
             </div>
           </div>
         </footer>
