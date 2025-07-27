@@ -293,7 +293,7 @@ export default function VideoAssessment() {
     if (currentRound < assessment.rounds.length - 1) {
       if (assessment.type === 'multi-day') {
         // For multi-day assessments, show completion message
-        alert(`Day ${currentRoundData.day} assessment complete! Please return tomorrow for Day ${currentRoundData.day + 1}.`);
+        alert(`Day $(currentRoundData as any).day assessment complete! Please return tomorrow for Day ${(currentRoundData as any).day + 1}.`);
         router.push('/platform');
       } else {
         // For single session, continue to next round
@@ -350,7 +350,7 @@ export default function VideoAssessment() {
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-gray-600">
                 {assessment.type === 'multi-day' 
-                  ? `Day ${currentRoundData.day} of ${assessment.rounds.length}` 
+                  ? `Day $(currentRoundData as any).day of ${assessment.rounds.length}` 
                   : `Round ${currentRound + 1} of ${assessment.rounds.length}`}
               </span>
               <span className="text-sm text-gray-600">
