@@ -7,8 +7,11 @@ import MobileMenu from './components/MobileMenu';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'SmartDNA - CorePersonaDNA™ Platform',
+  title: 'StartHub MediaAI - CorePersonaDNA™ Platform',
   description: 'The Inside-Out Content Revolution',
+  icons: {
+    icon: '/favicon.ico',
+  }
 };
 
 export default function RootLayout({
@@ -26,8 +29,21 @@ export default function RootLayout({
               {/* Logo */}
               <Link href="/" className="flex items-center">
                 <span className="text-2xl font-bold">
-                  <span className="text-blue-600">Smart</span>
-                  <span className="text-orange-500">DNA</span>
+                  <span className="text-blue-500">S</span>
+                  <span className="text-orange-500">t</span>
+                  <span className="text-yellow-500">a</span>
+                  <span className="text-red-500">r</span>
+                  <span className="text-green-500">t</span>
+                  <span className="text-purple-500">H</span>
+                  <span className="text-blue-500">u</span>
+                  <span className="text-orange-500">b</span>
+                  <span className="ml-2 text-pink-500">M</span>
+                  <span className="text-cyan-500">e</span>
+                  <span className="text-yellow-500">d</span>
+                  <span className="text-green-500">i</span>
+                  <span className="text-red-500">a</span>
+                  <span className="ml-2 text-teal-500">A</span>
+                  <span className="text-blue-500">I</span>
                 </span>
               </Link>
               
@@ -76,8 +92,21 @@ export default function RootLayout({
               {/* Company Info */}
               <div>
                 <h3 className="text-xl font-bold mb-4">
-                  <span className="text-blue-400">Smart</span>
-                  <span className="text-orange-400">DNA</span>
+                  <span className="text-blue-500">S</span>
+                  <span className="text-orange-500">t</span>
+                  <span className="text-yellow-500">a</span>
+                  <span className="text-red-500">r</span>
+                  <span className="text-green-500">t</span>
+                  <span className="text-purple-500">H</span>
+                  <span className="text-blue-500">u</span>
+                  <span className="text-orange-500">b</span>
+                  <span className="ml-1 text-pink-500">M</span>
+                  <span className="text-cyan-500">e</span>
+                  <span className="text-yellow-500">d</span>
+                  <span className="text-green-500">i</span>
+                  <span className="text-red-500">a</span>
+                  <span className="ml-1 text-teal-500">A</span>
+                  <span className="text-blue-500">I</span>
                 </h3>
                 <p className="text-gray-400">
                   Revolutionizing organizational content with AI that understands your DNA.
@@ -154,7 +183,7 @@ export default function RootLayout({
             
             {/* Copyright - Only at Bottom */}
             <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-              <p>© 2025 StartHub Media AI Pvt. Ltd. All rights reserved.</p>
+              <p>© 2025 StartHub MediaAI Pvt. Ltd. All rights reserved.</p>
               <p className="mt-2">Revolutionizing organizational content with Deep Neural Assessment™</p>
             </div>
           </div>
