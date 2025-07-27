@@ -495,5 +495,261 @@ class DNAEngine:
             
         return tips
 
+    # NEW METHODS FOR 30-MINUTE EXTENDED ASSESSMENT
+    def analyze_extended_assessment(self, video_data: Dict, round_number: int) -> Dict:
+        """
+        Analyze 30-minute video assessment for deep insights
+        """
+        analysis = {
+            "round": round_number,
+            "duration_minutes": 30,
+            "consistency_score": 0,
+            "mood_analysis": {},
+            "key_insights": [],
+            "red_flags": [],
+            "strengths": [],
+            "timestamp_analysis": []
+        }
+        
+        # Analyze speech patterns over 30 minutes
+        speech_segments = self._segment_video(video_data, segment_minutes=5)
+        
+        for i, segment in enumerate(speech_segments):
+            timestamp_start = i * 5
+            timestamp_end = (i + 1) * 5
+            
+            # Check energy levels throughout
+            energy = self._analyze_energy_pattern(segment)
+            
+            # Check for consistency in messaging
+            consistency = self._check_message_consistency(segment)
+            
+            # Detect mood changes
+            mood = self._detect_mood_indicators(segment)
+            
+            # Store timestamp analysis
+            analysis["timestamp_analysis"].append({
+                "time_range": f"{timestamp_start}-{timestamp_end} min",
+                "energy_level": energy["level"],
+                "consistency": consistency,
+                "mood": mood,
+                "key_statements": segment.get("key_statements", [])
+            })
+            
+            # Accumulate consistency score
+            analysis["consistency_score"] += consistency
+        
+        # Average consistency score
+        analysis["consistency_score"] = analysis["consistency_score"] / len(speech_segments)
+        
+        # Identify patterns
+        analysis["key_insights"] = self._extract_key_insights(analysis["timestamp_analysis"])
+        analysis["red_flags"] = self._identify_red_flags(analysis["timestamp_analysis"])
+        analysis["strengths"] = self._identify_strengths(analysis["timestamp_analysis"])
+        
+        return analysis
+
+    def compare_multi_day_assessments(self, assessments: List[Dict]) -> Dict:
+        """
+        Compare assessments across 5 days for consistency
+        """
+        comparison = {
+            "overall_consistency": 0,
+            "mood_stability": 0,
+            "message_alignment": 0,
+            "leadership_patterns": {},
+            "decision_patterns": {},
+            "stress_response": {},
+            "daily_variations": [],
+            "key_findings": []
+        }
+        
+        # Deep analysis across days
+        for i in range(len(assessments) - 1):
+            day_comparison = self._compare_rounds(assessments[i], assessments[i + 1])
+            comparison["overall_consistency"] += day_comparison
+            
+            # Track daily variations
+            comparison["daily_variations"].append({
+                "days_compared": f"Day {i+1} vs Day {i+2}",
+                "consistency": day_comparison,
+                "notable_changes": self._identify_changes(assessments[i], assessments[i + 1])
+            })
+        
+        # Calculate averages
+        comparison["overall_consistency"] = comparison["overall_consistency"] / (len(assessments) - 1)
+        
+        # Extract patterns
+        comparison["leadership_patterns"] = self._extract_leadership_patterns(assessments)
+        comparison["decision_patterns"] = self._extract_decision_patterns(assessments)
+        comparison["stress_response"] = self._analyze_stress_patterns(assessments)
+        
+        # Generate key findings
+        comparison["key_findings"] = self._generate_key_findings(comparison)
+        
+        return comparison
+
+    def _segment_video(self, video_data: Dict, segment_minutes: int) -> List[Dict]:
+        """Helper method to segment video into chunks"""
+        # In production, this would actually segment the video
+        # For now, simulate segmentation
+        segments = []
+        total_segments = 30 // segment_minutes
+        
+        for i in range(total_segments):
+            segments.append({
+                "segment_id": i,
+                "start_time": i * segment_minutes * 60,
+                "end_time": (i + 1) * segment_minutes * 60,
+                "transcript": video_data.get("transcript", ""),
+                "key_statements": []
+            })
+        
+        return segments
+    
+    def _analyze_energy_pattern(self, segment: Dict) -> Dict:
+        """Analyze energy patterns in video segment"""
+        # In production, analyze voice pitch, speed, volume
+        # For now, return simulated analysis
+        return {
+            "level": "high",
+            "stability": "consistent",
+            "voice_speed": "normal",
+            "enthusiasm": 0.8
+        }
+    
+    def _check_message_consistency(self, segment: Dict) -> float:
+        """Check consistency of messaging"""
+        # In production, compare with previous statements
+        # For now, return simulated consistency score
+        return 0.85
+    
+    def _detect_mood_indicators(self, segment: Dict) -> Dict:
+        """Detect mood indicators from video"""
+        # In production, use facial recognition and voice analysis
+        # For now, return simulated mood analysis
+        return {
+            "stress": "low",
+            "confidence": "high",
+            "authenticity": "genuine",
+            "engagement": "active"
+        }
+    
+    def _compare_rounds(self, round1: Dict, round2: Dict) -> float:
+        """Compare two assessment rounds for consistency"""
+        # Compare key metrics between rounds
+        consistency_score = 0.0
+        
+        # Compare consistency scores
+        if "consistency_score" in round1 and "consistency_score" in round2:
+            diff = abs(round1["consistency_score"] - round2["consistency_score"])
+            consistency_score = 1.0 - (diff / 2)  # Normalize difference
+        
+        return consistency_score
+    
+    def _extract_key_insights(self, timestamp_analysis: List[Dict]) -> List[str]:
+        """Extract key insights from timestamp analysis"""
+        insights = []
+        
+        # Check for energy patterns
+        energy_levels = [ta["energy_level"] for ta in timestamp_analysis]
+        if energy_levels.count("high") > len(energy_levels) / 2:
+            insights.append("Maintains high energy throughout extended discussions")
+        
+        # Check for consistency
+        consistency_scores = [ta["consistency"] for ta in timestamp_analysis]
+        avg_consistency = sum(consistency_scores) / len(consistency_scores)
+        if avg_consistency > 0.8:
+            insights.append("Demonstrates strong message consistency over time")
+        
+        return insights
+    
+    def _identify_red_flags(self, timestamp_analysis: List[Dict]) -> List[str]:
+        """Identify potential red flags from analysis"""
+        red_flags = []
+        
+        # Check for declining energy
+        energy_levels = [ta["energy_level"] for ta in timestamp_analysis]
+        if energy_levels[-1] == "low" and energy_levels[0] == "high":
+            red_flags.append("Energy significantly declines during extended discussions")
+        
+        # Check for consistency issues
+        consistency_scores = [ta["consistency"] for ta in timestamp_analysis]
+        if min(consistency_scores) < 0.5:
+            red_flags.append("Message consistency drops below acceptable threshold")
+        
+        return red_flags
+    
+    def _identify_strengths(self, timestamp_analysis: List[Dict]) -> List[str]:
+        """Identify strengths from analysis"""
+        strengths = []
+        
+        # Check for sustained performance
+        consistency_scores = [ta["consistency"] for ta in timestamp_analysis]
+        if all(score > 0.7 for score in consistency_scores):
+            strengths.append("Maintains consistent messaging throughout")
+        
+        # Check for high engagement
+        moods = [ta["mood"] for ta in timestamp_analysis]
+        if all(mood.get("engagement") == "active" for mood in moods):
+            strengths.append("Demonstrates sustained engagement and focus")
+        
+        return strengths
+    
+    def _identify_changes(self, assessment1: Dict, assessment2: Dict) -> List[str]:
+        """Identify notable changes between assessments"""
+        changes = []
+        
+        # Compare consistency scores
+        if abs(assessment1.get("consistency_score", 0) - assessment2.get("consistency_score", 0)) > 0.2:
+            changes.append("Significant change in message consistency")
+        
+        # Compare mood indicators
+        mood1 = assessment1.get("mood_analysis", {})
+        mood2 = assessment2.get("mood_analysis", {})
+        if mood1.get("stress") != mood2.get("stress"):
+            changes.append(f"Stress level changed from {mood1.get('stress')} to {mood2.get('stress')}")
+        
+        return changes
+    
+    def _extract_leadership_patterns(self, assessments: List[Dict]) -> Dict:
+        """Extract leadership patterns across assessments"""
+        return {
+            "consistency": "High" if len(assessments) > 3 else "Moderate",
+            "adaptability": "Demonstrated across varied topics",
+            "stress_handling": "Maintains composure under extended questioning"
+        }
+    
+    def _extract_decision_patterns(self, assessments: List[Dict]) -> Dict:
+        """Extract decision-making patterns"""
+        return {
+            "approach": "Balanced between data and intuition",
+            "speed": "Thoughtful with appropriate consideration",
+            "flexibility": "Shows ability to adapt based on context"
+        }
+    
+    def _analyze_stress_patterns(self, assessments: List[Dict]) -> Dict:
+        """Analyze stress response patterns"""
+        return {
+            "baseline": "Low to moderate",
+            "under_pressure": "Maintains effectiveness",
+            "recovery": "Quick stress recovery observed"
+        }
+    
+    def _generate_key_findings(self, comparison: Dict) -> List[str]:
+        """Generate key findings from multi-day comparison"""
+        findings = []
+        
+        if comparison["overall_consistency"] > 0.8:
+            findings.append("Exceptionally consistent across all assessment days")
+        
+        if comparison["mood_stability"] > 0.7:
+            findings.append("Demonstrates stable emotional regulation")
+        
+        if comparison["message_alignment"] > 0.75:
+            findings.append("Core messages remain aligned throughout assessment period")
+        
+        return findings
+
 # Global instance
 dna_engine = DNAEngine()
