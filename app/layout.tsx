@@ -181,7 +181,7 @@ export default function RootLayout({
               </div>
             </div>
             
-            {/* Copyright - Only at Bottom */}
+            {/* Copyright - ONLY at Bottom */}
             <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
               <p>© 2025 StartHub MediaAI Pvt. Ltd. All rights reserved.</p>
               <p className="mt-2">Revolutionizing organizational content with Deep Neural Assessment™</p>

@@ -1,222 +1,164 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Check, Star, MessageSquare, FileText, Sparkles } from 'lucide-react';
 
 export default function AssessmentSelection() {
   const router = useRouter();
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
 
-  const assessmentOptions = [
+  const assessmentPlans = [
     {
-      type: 'express',
+      id: 'express',
       name: 'Express Assessment',
-      duration: '45-50 minutes',
-      sessions: 'Single Session',
       price: '₹35,000',
+      duration: '45 minutes',
+      description: 'Quick leadership DNA snapshot',
       features: [
-        '5 topics covered in one session',
-        '10 minutes per topic',
-        'Immediate results',
-        'Best for busy executives',
-        'Basic DNA profile'
+        'Single conversational interview',
+        'Voice + Text interaction',
+        'Core leadership style analysis',
+        '20-page insight report',
+        'Basic DNA profile',
+        '24-hour delivery'
       ],
-      color: 'from-blue-500 to-cyan-500',
+      icon: <MessageSquare className="w-8 h-8" />,
       popular: false
     },
     {
-      type: 'standard',
-      name: 'Standard Assessment',
-      duration: '75 minutes total',
-      sessions: '5 days × 15 minutes',
-      price: '₹50,000',
-      features: [
-        'One topic per day',
-        '15 minutes daily commitment',
-        'Better consistency analysis',
-        'Work-life balance friendly',
-        'Enhanced DNA profile'
-      ],
-      color: 'from-purple-500 to-pink-500',
-      popular: true
-    },
-    {
-      type: 'premium',
-      name: 'Premium Assessment',
-      duration: '2.5 hours total',
-      sessions: '5 days × 30 minutes',
+      id: 'deep',
+      name: 'Deep Assessment',
       price: '₹75,000',
+      duration: '5 days (30 min/day)',
+      description: 'Comprehensive organizational DNA mapping',
       features: [
-        'Deep dive into each topic',
-        '30 minutes of focused discussion',
-        'Most accurate DNA profiling',
-        'Comprehensive analysis',
-        'Premium insights & recommendations'
+        'Five focused interview sessions',
+        'Voice + Text deep conversations',
+        'Complete leadership analysis',
+        '40-50 page detailed report',
+        'Industry insights & projections',
+        'FunctionPersonaDNA mapping',
+        'Strategic recommendations'
       ],
-      color: 'from-green-500 to-emerald-500',
-      popular: false
+      icon: <Sparkles className="w-8 h-8" />,
+      popular: true
     }
   ];
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold">
-              <span className="text-blue-600">Core</span>
-              <span className="text-orange-500">Persona</span>
-              <span className="text-green-500">DNA</span>
-              <span className="text-gray-400 text-xl align-super">™</span>
-              <span className="ml-2">Assessment Options</span>
-            </h1>
-            <Link href="/" className="text-gray-600 hover:text-gray-900">
-              Back to Home
-            </Link>
-          </div>
-        </div>
-      </header>
+  const handleSelectPlan = (planId: string) => {
+    setSelectedPlan(planId);
+    // Navigate to interview chat
+    router.push('/interview-chat');
+  };
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* Introduction */}
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12">
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Choose Your Assessment Journey</h2>
+          <h1 className="text-4xl font-bold mb-4">
+            Choose Your <span className="text-blue-600">CorePersonaDNA™</span> Assessment
+          </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Select the assessment type that best fits your schedule and requirements. 
-            All assessments use the same advanced AI analysis to create your unique CorePersonaDNA profile.
+            Discover your leadership DNA through AI-powered conversational interviews.
+            Our intelligent system adapts to your responses for deep insights.
           </p>
         </div>
 
-        {/* Assessment Options */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {assessmentOptions.map((option) => (
+        {/* Assessment Plans */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {assessmentPlans.map((plan) => (
             <div
-              key={option.type}
-              className={`relative bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-105 transition-all duration-300 ${
-                option.popular ? 'ring-4 ring-purple-500 ring-opacity-50' : ''
+              key={plan.id}
+              className={`relative bg-white rounded-2xl shadow-xl p-8 ${
+                plan.popular ? 'ring-4 ring-blue-500 ring-opacity-50' : ''
               }`}
             >
-              {option.popular && (
-                <div className="absolute top-0 right-0 bg-purple-500 text-white px-4 py-1 rounded-bl-lg text-sm font-semibold">
-                  Most Popular
+              {plan.popular && (
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center">
+                    <Star className="w-4 h-4 mr-1" /> Most Popular
+                  </span>
                 </div>
               )}
-              
-              <div className={`h-2 bg-gradient-to-r ${option.color}`} />
-              
-              <div className="p-8">
-                <h3 className="text-2xl font-bold mb-2">{option.name}</h3>
-                <div className="text-3xl font-bold mb-4 text-gray-900">{option.price}</div>
-                
-                <div className="space-y-2 mb-6 text-gray-600">
-                  <p className="flex items-center">
-                    <span className="mr-2">⏱️</span>
-                    {option.duration}
-                  </p>
-                  <p className="flex items-center">
-                    <span className="mr-2">📅</span>
-                    {option.sessions}
-                  </p>
+
+              <div className="text-center mb-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                  {plan.icon}
                 </div>
-                
-                <ul className="space-y-3 mb-8">
-                  {option.features.map((feature, index) => (
-                    <li key={index} className="flex items-start">
-                      <span className="text-green-500 mr-2">✓</span>
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <button
-                  onClick={() => router.push(`/video-assessment?type=${option.type}`)}
-                  className={`w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r ${option.color} hover:shadow-lg transform hover:-translate-y-0.5 transition`}
-                >
-                  Start {option.name}
-                </button>
+                <h2 className="text-2xl font-bold mb-2">{plan.name}</h2>
+                <p className="text-gray-600 mb-4">{plan.description}</p>
+                <div className="text-4xl font-bold text-blue-600 mb-2">{plan.price}</div>
+                <p className="text-gray-500">{plan.duration}</p>
               </div>
+
+              <ul className="space-y-3 mb-8">
+                {plan.features.map((feature, index) => (
+                  <li key={index} className="flex items-start">
+                    <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                onClick={() => handleSelectPlan(plan.id)}
+                className={`w-full py-3 px-6 rounded-lg font-semibold transition ${
+                  plan.popular
+                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Start Assessment
+              </button>
             </div>
           ))}
         </div>
 
-        {/* Comparison Table */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          <div className="p-6">
-            <h3 className="text-2xl font-bold mb-6">Detailed Comparison</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-3 px-4">Feature</th>
-                    <th className="text-center py-3 px-4">Express</th>
-                    <th className="text-center py-3 px-4">Standard</th>
-                    <th className="text-center py-3 px-4">Premium</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b">
-                    <td className="py-3 px-4">Total Time Investment</td>
-                    <td className="text-center py-3 px-4">45-50 min</td>
-                    <td className="text-center py-3 px-4">75 min</td>
-                    <td className="text-center py-3 px-4">150 min</td>
-                  </tr>
-                  <tr className="border-b bg-gray-50">
-                    <td className="py-3 px-4">Number of Sessions</td>
-                    <td className="text-center py-3 px-4">1</td>
-                    <td className="text-center py-3 px-4">5</td>
-                    <td className="text-center py-3 px-4">5</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="py-3 px-4">DNA Profile Accuracy</td>
-                    <td className="text-center py-3 px-4">85%</td>
-                    <td className="text-center py-3 px-4">92%</td>
-                    <td className="text-center py-3 px-4">98%</td>
-                  </tr>
-                  <tr className="border-b bg-gray-50">
-                    <td className="py-3 px-4">Consistency Analysis</td>
-                    <td className="text-center py-3 px-4">Basic</td>
-                    <td className="text-center py-3 px-4">Enhanced</td>
-                    <td className="text-center py-3 px-4">Comprehensive</td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="py-3 px-4">Leadership Insights</td>
-                    <td className="text-center py-3 px-4">Core</td>
-                    <td className="text-center py-3 px-4">Detailed</td>
-                    <td className="text-center py-3 px-4">Executive-level</td>
-                  </tr>
-                  <tr className="border-b bg-gray-50">
-                    <td className="py-3 px-4">Best For</td>
-                    <td className="text-center py-3 px-4">Quick Start</td>
-                    <td className="text-center py-3 px-4">Balanced Approach</td>
-                    <td className="text-center py-3 px-4">Maximum Accuracy</td>
-                  </tr>
-                </tbody>
-              </table>
+        {/* Additional Info */}
+        <div className="mt-16 text-center">
+          <h3 className="text-2xl font-bold mb-6">How It Works</h3>
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="text-center">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageSquare className="w-8 h-8 text-blue-600" />
+              </div>
+              <h4 className="font-semibold mb-2">1. Conversational Interview</h4>
+              <p className="text-gray-600">
+                Engage in natural voice or text conversations with our AI interviewer
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-blue-600" />
+              </div>
+              <h4 className="font-semibold mb-2">2. AI Analysis</h4>
+              <p className="text-gray-600">
+                Our multi-LLM system analyzes your responses for deep insights
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FileText className="w-8 h-8 text-blue-600" />
+              </div>
+              <h4 className="font-semibold mb-2">3. DNA Report</h4>
+              <p className="text-gray-600">
+                Receive comprehensive insights about your leadership DNA
+              </p>
             </div>
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <div className="mt-12">
-          <h3 className="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h3>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-lg p-6">
-              <h4 className="font-semibold mb-2">Can I upgrade my assessment later?</h4>
-              <p className="text-gray-600">Yes, you can upgrade from Express to Standard or Premium within 30 days by paying the difference.</p>
-            </div>
-            <div className="bg-white rounded-lg p-6">
-              <h4 className="font-semibold mb-2">What if I miss a day in multi-day assessments?</h4>
-              <p className="text-gray-600">No problem! You have up to 10 days to complete all sessions at your convenience.</p>
-            </div>
-            <div className="bg-white rounded-lg p-6">
-              <h4 className="font-semibold mb-2">Is my data secure?</h4>
-              <p className="text-gray-600">Absolutely. All video assessments are encrypted and processed securely. We never share your data.</p>
-            </div>
-            <div className="bg-white rounded-lg p-6">
-              <h4 className="font-semibold mb-2">When do I get my results?</h4>
-              <p className="text-gray-600">Your CorePersonaDNA profile is generated within 24 hours of completing your assessment.</p>
-            </div>
-          </div>
+        {/* Back Button */}
+        <div className="mt-12 text-center">
+          <Link
+            href="/platform"
+            className="text-blue-600 hover:text-blue-700 font-medium"
+          >
+            ← Back to Platform
+          </Link>
         </div>
       </div>
     </div>
