@@ -1,164 +1,313 @@
+
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Check, Star, MessageSquare, FileText, Sparkles } from 'lucide-react';
+import { ArrowLeft, Check, Star, HelpCircle } from 'lucide-react';
+
+// Use environment variable or fallback to direct URL
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://smart-deep-neural-assessment-dna.onrender.com';
 
 export default function AssessmentSelection() {
   const router = useRouter();
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    founderName: '',
+    companyName: '',
+    email: '',
+    phone: ''
+  });
+  const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
-  const assessmentPlans = [
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Store form data in sessionStorage
+    sessionStorage.setItem('assessmentData', JSON.stringify(formData));
+    
+    // Redirect to assessment tool with query params
+    const params = new URLSearchParams({
+      name: formData.founderName,
+      company: formData.companyName,
+      email: formData.email,
+      phone: formData.phone
+    });
+    
+    // Redirect to the backend assessment tool
+    window.location.href = `${API_URL}?${params.toString()}`;
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const faqs = [
     {
-      id: 'express',
-      name: 'Express Assessment',
-      price: '₹35,000',
-      duration: '45 minutes',
-      description: 'Quick leadership DNA snapshot',
-      features: [
-        'Single conversational interview',
-        'Voice + Text interaction',
-        'Core leadership style analysis',
-        '20-page insight report',
-        'Basic DNA profile',
-        '24-hour delivery'
-      ],
-      icon: <MessageSquare className="w-8 h-8" />,
-      popular: false
+      question: "What is CorePersonaDNA™ assessment?",
+      answer: "CorePersonaDNA™ is an AI-powered deep neural assessment that analyzes your leadership patterns, decision-making style, and organizational alignment through a 30-minute voice interview."
     },
     {
-      id: 'deep',
-      name: 'Deep Assessment',
-      price: '₹75,000',
-      duration: '5 days (30 min/day)',
-      description: 'Comprehensive organizational DNA mapping',
-      features: [
-        'Five focused interview sessions',
-        'Voice + Text deep conversations',
-        'Complete leadership analysis',
-        '40-50 page detailed report',
-        'Industry insights & projections',
-        'FunctionPersonaDNA mapping',
-        'Strategic recommendations'
-      ],
-      icon: <Sparkles className="w-8 h-8" />,
-      popular: true
+      question: "How long does the assessment take?",
+      answer: "The assessment takes 30 minutes for the interview. You'll receive a preliminary report within 24 hours."
+    },
+    {
+      question: "Can I take the assessment in my regional language?",
+      answer: "Yes! While voice recording is currently in English, you can type your responses in Hindi, Tamil, Telugu, Bengali, Gujarati, Kannada, Malayalam, Marathi, Punjabi, or any Indian language."
+    },
+    {
+      question: "What's included in the Deep Assessment?",
+      answer: "The Deep Assessment includes 5 rounds of analysis, complete organizational blueprint, 6 specialized hub recommendations, team composition analysis, and 90-day implementation roadmap."
+    },
+    {
+      question: "Is my data secure?",
+      answer: "Yes, we use enterprise-grade encryption and your data is processed through secure AI models. We never share your information with third parties."
     }
   ];
 
-  const handleSelectPlan = (planId: string) => {
-    setSelectedPlan(planId);
-    // Navigate to interview chat
-    router.push('/interview-chat');
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">
-            Choose Your <span className="text-blue-600">CorePersonaDNA™</span> Assessment
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white shadow-sm">
+        <div className="container mx-auto px-4 py-4">
+          <Link href="/" className="inline-flex items-center text-blue-600 hover:text-blue-700">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Home
+          </Link>
+          <h1 className="text-3xl font-bold mt-4 bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 bg-clip-text text-transparent">
+            CorePersonaDNA™ Assessment Options
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Discover your leadership DNA through AI-powered conversational interviews.
-            Our intelligent system adapts to your responses for deep insights.
-          </p>
         </div>
+      </div>
 
-        {/* Assessment Plans */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {assessmentPlans.map((plan) => (
-            <div
-              key={plan.id}
-              className={`relative bg-white rounded-2xl shadow-xl p-8 ${
-                plan.popular ? 'ring-4 ring-blue-500 ring-opacity-50' : ''
-              }`}
-            >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center">
-                    <Star className="w-4 h-4 mr-1" /> Most Popular
-                  </span>
-                </div>
-              )}
-
-              <div className="text-center mb-6">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-                  {plan.icon}
-                </div>
-                <h2 className="text-2xl font-bold mb-2">{plan.name}</h2>
-                <p className="text-gray-600 mb-4">{plan.description}</p>
-                <div className="text-4xl font-bold text-blue-600 mb-2">{plan.price}</div>
-                <p className="text-gray-500">{plan.duration}</p>
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8">
+        {/* Form Section */}
+        <div className="bg-white rounded-lg shadow-lg p-8 mb-8 border-t-4 border-gradient-to-r from-blue-500 via-purple-500 to-green-500">
+          <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Start Your Assessment Journey
+          </h2>
+          <p className="text-gray-600 mb-6">Fill in your details to begin the transformative assessment</p>
+          
+          <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Founder Name / संस्थापक का नाम
+              </label>
+              <input
+                type="text"
+                name="founderName"
+                required
+                value={formData.founderName}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Company Name / कंपनी का नाम
+              </label>
+              <input
+                type="text"
+                name="companyName"
+                required
+                value={formData.companyName}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email / ईमेल
+              </label>
+              <input
+                type="email"
+                name="email"
+                required
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Phone / फ़ोन
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                required
+                pattern="[0-9]{10}"
+                value={formData.phone}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            
+            <div className="md:col-span-2">
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg mb-4">
+                <p className="text-sm text-gray-700">
+                  <span className="font-semibold">🌟 Language Support:</span> Voice recording in English | Text input in Hindi, Tamil, Telugu, Bengali, Gujarati, Kannada, Malayalam, Marathi, Punjabi, or any Indian language!
+                </p>
               </div>
-
-              <ul className="space-y-3 mb-8">
-                {plan.features.map((feature, index) => (
-                  <li key={index} className="flex items-start">
-                    <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
+              
+              {/* Loading Message for Render Free Tier */}
+              <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-4">
+                <p className="text-sm text-yellow-800">
+                  <span className="font-semibold">⏳ Note:</span> The assessment tool may take 30-60 seconds to load on first access. Please be patient.
+                </p>
+              </div>
+              
               <button
-                onClick={() => handleSelectPlan(plan.id)}
-                className={`w-full py-3 px-6 rounded-lg font-semibold transition ${
-                  plan.popular
-                    ? 'bg-blue-600 text-white hover:bg-blue-700'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
+                type="submit"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition-shadow"
               >
-                Start Assessment
+                Start Your Assessment Journey →
               </button>
             </div>
-          ))}
+          </form>
         </div>
 
-        {/* Additional Info */}
-        <div className="mt-16 text-center">
-          <h3 className="text-2xl font-bold mb-6">How It Works</h3>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageSquare className="w-8 h-8 text-blue-600" />
+        {/* Pricing Section */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-center mb-8">Choose Your Assessment Depth</h2>
+          
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Express Assessment */}
+            <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-8">
+              <h3 className="text-xl font-bold mb-4">Express Assessment</h3>
+              <div className="text-3xl font-bold mb-4 text-blue-600">₹35,000</div>
+              
+              <div className="space-y-3 mb-8">
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span>30-minute voice/text assessment</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span>Basic personality insights</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span>Leadership style analysis</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span>Key recommendations</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span>24-hour delivery</span>
+                </div>
               </div>
-              <h4 className="font-semibold mb-2">1. Conversational Interview</h4>
-              <p className="text-gray-600">
-                Engage in natural voice or text conversations with our AI interviewer
-              </p>
+              
+              <button className="w-full py-3 px-6 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                Select Express
+              </button>
             </div>
-            <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="w-8 h-8 text-blue-600" />
+
+            {/* Deep Assessment */}
+            <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-8 relative">
+              <div className="absolute -top-4 right-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center">
+                <Star className="w-4 h-4 mr-1" />
+                Popular
               </div>
-              <h4 className="font-semibold mb-2">2. AI Analysis</h4>
-              <p className="text-gray-600">
-                Our multi-LLM system analyzes your responses for deep insights
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FileText className="w-8 h-8 text-blue-600" />
+              
+              <h3 className="text-xl font-bold mb-4">Deep Assessment</h3>
+              <div className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">₹75,000</div>
+              
+              <div className="space-y-3 mb-8">
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span>Everything in Express, plus:</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span>5-round deep analysis</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span>Complete organizational blueprint</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span>6 Hub recommendations</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span>Team composition analysis</span>
+                </div>
+                <div className="flex items-center">
+                  <Check className="w-5 h-5 text-green-500 mr-3" />
+                  <span>90-day implementation roadmap</span>
+                </div>
               </div>
-              <h4 className="font-semibold mb-2">3. DNA Report</h4>
-              <p className="text-gray-600">
-                Receive comprehensive insights about your leadership DNA
-              </p>
+              
+              <button className="w-full py-3 px-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition-shadow">
+                Select Deep Assessment
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Back Button */}
-        <div className="mt-12 text-center">
-          <Link
-            href="/platform"
-            className="text-blue-600 hover:text-blue-700 font-medium"
-          >
-            ← Back to Platform
-          </Link>
+        {/* How It Works */}
+        <div className="bg-white rounded-lg shadow-lg p-8 mb-12">
+          <h2 className="text-2xl font-bold text-center mb-8">How It Works</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-600">1</span>
+              </div>
+              <h3 className="font-semibold mb-2">Take Assessment</h3>
+              <p className="text-gray-600">30-minute voice interview in English or type in any Indian language</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-purple-600">2</span>
+              </div>
+              <h3 className="font-semibold mb-2">AI Analysis</h3>
+              <p className="text-gray-600">Our 6 AI models analyze your responses for deep insights</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-green-600">3</span>
+              </div>
+              <h3 className="font-semibold mb-2">Get Report</h3>
+              <p className="text-gray-600">Receive comprehensive report with actionable recommendations</p>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ Section */}
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+          
+          <div className="space-y-4 max-w-3xl mx-auto">
+            {faqs.map((faq, index) => (
+              <div key={index} className="border border-gray-200 rounded-lg">
+                <button
+                  className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50"
+                  onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
+                >
+                  <span className="font-medium">{faq.question}</span>
+                  <HelpCircle className={`w-5 h-5 text-gray-400 transform transition-transform ${expandedFaq === index ? 'rotate-180' : ''}`} />
+                </button>
+                {expandedFaq === index && (
+                  <div className="px-6 py-4 border-t border-gray-200">
+                    <p className="text-gray-600">{faq.answer}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

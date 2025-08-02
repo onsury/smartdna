@@ -1,0 +1,133 @@
+import { claudeMaster } from './claude-orchestrator';
+import { supabase } from './supabase';
+
+interface ClientApplication {
+  // Company Details
+  companyName: string;
+  industry: string;
+  yearFounded: number;
+  website: string;
+  
+  // Founder Details
+  founderName: string;
+  founderEmail: string;
+  founderPhone: string;
+  founderLinkedIn?: string;
+  
+  // Organization Structure
+  totalEmployees: number;
+  departments: {
+    HR: { headName: string; teamSize: number; };
+    Finance: { headName: string; teamSize: number; };
+    Tech: { headName: string; teamSize: number; };
+    Sales: { headName: string; teamSize: number; };
+    Marketing: { headName: string; teamSize: number; };
+  };
+  
+  // Business Metrics
+  revenueModel: string[];
+  yearlyRevenue: {
+    year2023: number;
+    year2024: number;
+    year2025: number;
+  };
+  productCategories: string[];
+  
+  // Assessment Preferences
+  assessmentType: 'express' | 'deep';
+  preferredLanguage: string; // English, Hindi, Tamil, etc.
+  specialRequirements?: string;
+}
+
+export class ClientOnboardingOrchestrator {
+  async processNewApplication(application: ClientApplication) {
+    console.log('🔍 Claude: Evaluating new client application...');
+    
+    // Step 1: Initial Evaluation by Claude
+    const evaluation = await claudeMaster.evaluateClient({
+      application,
+      task: 'initial_screening',
+      instructions: `As Suryanarayanan's AI assistant with 35 years of industry expertise backing,
+        evaluate this client for DNA assessment suitability.
+        Consider: Industry fit, Organization maturity, Assessment readiness`
+    });
+    
+    if (!evaluation.approved) {
+      return { 
+        status: 'rejected', 
+        reason: evaluation.reason,
+        suggestions: evaluation.suggestions 
+      };
+    }
+    
+    // Step 2: Industry Research via Perplexity
+    console.log('📊 Initiating industry research...');
+    const industryInsights = await claudeMaster.orchestrateResearch({
+      company: application.companyName,
+      industry: application.industry,
+      competitors: true,
+      marketTrends: true,
+      challenges: true,
+      opportunities: true,
+      llm: 'perplexity' // Claude assigns Perplexity for real-time research
+    });
+    
+    // Step 3: Create Client Profile
+    const clientProfile = await this.createClientProfile(
+      application, 
+      evaluation, 
+      industryInsights
+    );
+    
+    // Step 4: Schedule Assessment
+    const assessment = await this.scheduleAssessment(clientProfile);
+    
+    return {
+      status: 'approved',
+      clientId: clientProfile.id,
+      assessmentId: assessment.id,
+      nextSteps: assessment.schedule,
+      researchBrief: industryInsights.summary
+    };
+  }
+  
+  private async createClientProfile(
+    application: ClientApplication,
+    evaluation: any,
+    research: any
+  ) {
+    const profile = {
+      id: `client_${Date.now()}`,
+      ...application,
+      evaluationScore: evaluation.score,
+      industryPosition: research.competitivePosition,
+      assessmentReadiness: evaluation.readiness,
+      createdAt: new Date().toISOString(),
+      status: 'pending_assessment'
+    };
+    
+    // Save to Supabase
+    await supabase.from('client_profiles').insert(profile);
+    
+    return profile;
+  }
+  
+  private async scheduleAssessment(clientProfile: any) {
+    // Claude schedules based on client preferences
+    return await claudeMaster.scheduleInterview({
+      clientId: clientProfile.id,
+      type: clientProfile.assessmentType,
+      language: clientProfile.preferredLanguage,
+      founderEmail: clientProfile.founderEmail,
+      proposedSlots: this.generateTimeSlots(clientProfile.assessmentType)
+    });
+  }
+  
+  private generateTimeSlots(type: string) {
+    // Generate appropriate time slots
+    if (type === 'express') {
+      return ['Single 45-minute session within next 3 days'];
+    }
+    return ['5 sessions of 30 minutes each over 5 days'];
+  }
+}

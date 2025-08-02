@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { supabase, authHelpers } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 
 export default function PlatformDashboard() {
   const router = useRouter();
@@ -15,7 +15,7 @@ export default function PlatformDashboard() {
   }, []);
 
   const checkUser = async () => {
-    const currentUser = await authHelpers.getCurrentUser();
+const currentUser = null; // Mock user for now
     if (!currentUser) {
       // For now, use mock user
       setUser({

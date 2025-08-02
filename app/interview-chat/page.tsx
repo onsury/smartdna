@@ -1,116 +1,98 @@
-import { NextResponse } from 'next/server';
+'use client';
 
-// Interview questions bank
-const INTERVIEW_QUESTIONS = [
-  "Tell me about the moment you decided to become an entrepreneur. What was happening in your life?",
-  "What personal experience or pain point led to founding your company?",
-  "What three principles from your upbringing still guide your business decisions today?",
-  "How do you explain your company's mission to a 10-year-old child?",
-  "Describe a time when you had to choose between profit and principles. What did you do?",
-  "Walk me through how you handled the last major crisis in your company.",
-  "How do you balance short-term pressures with long-term vision?",
-  "What's your approach when a trusted team member fundamentally disagrees with you?",
-  "How do you decide where to invest limited resources?",
-  "What's the biggest risk you've taken that failed? What did you learn?",
-  "How do you ensure your vision is understood at every level of your organization?",
-  "What major belief about business have you changed your mind about?",
-  "How are you preparing your company for changes 5 years out?",
-  "What would you want a case study about your company to highlight?",
-  "How has leadership changed you as a person?"
-];
+import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-// For now, we'll use mock responses until API keys are set up
-// This gives you a working system immediately
-async function getMockAIResponse(messages: any[], questionIndex: number): Promise<string> {
-  const lastUserMessage = messages[messages.length - 1].content;
-  const currentQuestion = INTERVIEW_QUESTIONS[questionIndex];
+export default function InterviewChat() {
+  const searchParams = useSearchParams();
+  const sessionId = searchParams.get('session');
+  const [messages, setMessages] = useState([
+    { role: 'assistant', content: 'Welcome! Tell me about your vision for StartHub MediaAI. What inspired you to create this platform?' }
+  ]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
   
-  // Simulate thinking time
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  // Generate contextual follow-up responses
-  const followUpResponses = [
-    "That's fascinating. Can you tell me more about what motivated that decision?",
-    "I can see how that shaped your leadership style. How did that experience influence your approach to building teams?",
-    "That's a powerful insight. How do you apply that principle when facing difficult decisions today?",
-    "Interesting perspective. Can you share a specific example of when this approach made a difference?",
-    "Thank you for sharing that. How has this philosophy evolved as your company has grown?",
-  ];
-  
-  // For the first few messages, ask the current question
-  if (messages.length <= 2) {
-    return currentQuestion;
-  }
-  
-  // After some conversation, provide a follow-up and transition
-  if (messages.length % 6 === 0 && questionIndex < INTERVIEW_QUESTIONS.length - 1) {
-    return `${followUpResponses[Math.floor(Math.random() * followUpResponses.length)]} 
-
-Let me ask you about another aspect of your leadership: ${INTERVIEW_QUESTIONS[questionIndex + 1]}`;
-  }
-  
-  // Otherwise, provide a contextual follow-up
-  return followUpResponses[Math.floor(Math.random() * followUpResponses.length)];
-}
-
-// This is where you'll add real LLM calls once API keys are configured
-async function getAIResponse(messages: any[], questionIndex: number): Promise<{ response: string, nextQuestion: boolean }> {
-  try {
-    // Check if we have API keys
-    const hasOpenAI = !!process.env.OPENAI_API_KEY;
-    const hasAnthropic = !!process.env.ANTHROPIC_API_KEY;
-    const hasGemini = !!process.env.GEMINI_API_KEY;
+  const sendMessage = async () => {
+    if (!input.trim() || loading) return;
     
-    // For now, use mock responses if no API keys are configured
-    if (!hasOpenAI && !hasAnthropic && !hasGemini) {
-      const response = await getMockAIResponse(messages, questionIndex);
-      const shouldMoveToNext = messages.length % 6 === 0 && questionIndex < INTERVIEW_QUESTIONS.length - 1;
-      return { response, nextQuestion: shouldMoveToNext };
+    const userMessage = input;
+    setInput('');
+    const updatedMessages = [...messages, { role: 'user', content: userMessage }];
+    setMessages(updatedMessages);
+    setLoading(true);
+    
+    try {
+      const response = await fetch('/api/interview/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId,
+          message: userMessage,
+          messages: updatedMessages
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setMessages([...updatedMessages, { 
+          role: 'assistant', 
+          content: data.response 
+        }]);
+      } else {
+        console.error('Chat error:', data.error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
     }
-    
-    // When you add API keys, this is where the real LLM calls will go
-    // For now, return mock response
-    const response = await getMockAIResponse(messages, questionIndex);
-    const shouldMoveToNext = messages.length % 6 === 0 && questionIndex < INTERVIEW_QUESTIONS.length - 1;
-    return { response, nextQuestion: shouldMoveToNext };
-    
-  } catch (error) {
-    console.error('AI Response Error:', error);
-    return {
-      response: "I apologize for the technical difficulty. Let me rephrase - could you tell me more about your leadership journey?",
-      nextQuestion: false
-    };
-  }
-}
-
-export async function POST(request: Request) {
-  try {
-    const { messages, questionIndex } = await request.json();
-    
-    // Validate input
-    if (!messages || !Array.isArray(messages)) {
-      return NextResponse.json(
-        { error: 'Invalid messages format' },
-        { status: 400 }
-      );
-    }
-    
-    // Get AI response
-    const { response, nextQuestion } = await getAIResponse(messages, questionIndex || 0);
-    
-    // Return response
-    return NextResponse.json({
-      response,
-      nextQuestion,
-      llmUsed: 'mock', // Will update when real LLMs are connected
-      timestamp: new Date().toISOString()
-    });
-    
-  } catch (error) {
-    console.error('Chat API Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to process message' },
-      { status: 500 }
-    );
-  }
+  };
+  
+  return (
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow p-6">
+        <h1 className="text-2xl font-bold mb-4">CorePersonaDNA Interview</h1>
+        <p className="text-sm text-gray-600 mb-4">Session: {sessionId}</p>
+        
+        <div className="h-96 overflow-y-auto mb-4 p-4 border rounded">
+          {messages.map((msg, i) => (
+            <div key={i} className={`mb-4 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+              <div className={`inline-block p-3 rounded-lg max-w-2xl ${
+                msg.role === 'user' 
+                  ? 'bg-blue-600 text-white' 
+                  : 'bg-gray-100 text-gray-800'
+              }`}>
+                <strong>{msg.role}:</strong> {msg.content}
+              </div>
+            </div>
+          ))}
+          {loading && (
+            <div className="text-center text-gray-500">
+              <div>Claude is thinking...</div>
+            </div>
+          )}
+        </div>
+        
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+            className="flex-1 p-2 border rounded"
+            placeholder="Type your response..."
+            disabled={loading}
+          />
+          <button 
+            onClick={sendMessage}
+            disabled={loading || !input.trim()}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+          >
+            {loading ? 'Sending...' : 'Send'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }

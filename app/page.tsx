@@ -10,6 +10,8 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    
+
       {/* Navigation */}
       <nav className="flex justify-between items-center p-6 max-w-7xl mx-auto">
         <div className="text-2xl font-bold">
@@ -29,6 +31,7 @@ export default function Home() {
           </button>
         </div>
       </nav>
+      
 
       {/* Hero Section - UPDATED */}
       <section className="max-w-7xl mx-auto px-6 py-20 text-center">
@@ -114,7 +117,7 @@ export default function Home() {
               </h3>
               <p className="text-lg text-gray-700 mb-4">
                 Our proprietary Deep Neural Assessment (DNA) technology uses advanced AI to analyze 
-                leadership communication patterns through video interviews. Unlike simple personality 
+                leadership communication patterns through voice and text interviews. Unlike simple personality 
                 tests, DNA creates a multi-dimensional profile of how leaders think, communicate, 
                 and make decisions.
               </p>
@@ -167,9 +170,9 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">🎥</span>
+                <span className="text-3xl">💬</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">1. Video Assessment</h3>
+              <h3 className="text-xl font-semibold mb-2">1. Voice & Text Assessment</h3>
               <p className="text-gray-600">Complete AI-guided interviews that capture your natural communication style</p>
               <Link href="/corepersonadna" className="text-blue-600 text-sm hover:underline mt-2 inline-block">
                 Learn more about assessment →
@@ -277,8 +280,8 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="mb-4">© 2025 StartHub Media AI Pvt. Ltd. All rights reserved.</p>
-          <p className="text-gray-400">Revolutionizing organizational content with Deep Neural Assessment (DNA)™</p>
+          <p className="mb-4"></p>
+          <p className="text-gray-400"></p>
         </div>
       </footer>
     </main>

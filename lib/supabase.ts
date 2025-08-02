@@ -1,61 +1,32 @@
-// Mock Supabase client - NO REAL SUPABASE NEEDED
-const mockSupabase = {
-  auth: {
-    getSession: async () => ({ 
-      data: { 
-        session: { 
-          user: { id: '123', email: 'test@example.com' } 
-        } 
-      }, 
-      error: null 
-    }),
-    getUser: async () => ({ 
-      data: { user: { id: '123', email: 'test@example.com' } }, 
-      error: null 
-    }),
-    signOut: async () => ({ error: null }),
-    signInWithPassword: async () => ({ 
-      data: { user: { id: '123', email: 'test@example.com' } }, 
-      error: null 
-    }),
-    signUp: async () => ({ 
-      data: { user: { id: '123', email: 'test@example.com' } }, 
-      error: null 
-    }),
-  },
-  from: (table: string) => ({
-    select: () => ({
-      eq: () => ({
-        single: () => ({
-          execute: async () => ({ data: null, error: null })
-        })
-      })
-    })
-  })
-};
+import { createClient } from '@supabase/supabase-js';
 
-export const supabase = mockSupabase as any;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+export const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 export const authHelpers = {
   async getCurrentUser() {
-    return { id: '123', email: 'test@example.com' };
-  },
-  
-  async signOut() {
-    console.log('Mock sign out');
+    try {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error) throw error;
+      return user;
+    } catch (error) {
+      console.error('Error getting user:', error);
+      return null;
+    }
   },
   
   async signIn(email: string, password: string) {
-    console.log('Mock sign in:', email);
-    return { user: { id: '123', email } };
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    return { data, error };
   },
   
-  async signUp(email: string, password: string, fullName: string, companyName: string) {
-    console.log('Mock sign up:', email);
-    return { user: { id: '123', email } };
-  },
-  
-  async checkDNACompleted(userId: string) {
-    return false;
+  async signOut() {
+    const { error } = await supabase.auth.signOut();
+    return { error };
   }
 };

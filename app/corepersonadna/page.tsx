@@ -53,7 +53,7 @@ export default function CorePersonaDNAPage() {
               <h2 className="text-3xl font-bold mb-6">What is CorePersonaDNA?</h2>
               <p className="text-lg text-gray-700 mb-6">
                 CorePersonaDNA is a revolutionary AI-powered system that captures the authentic 
-                leadership essence of founders through 2.5 hours of structured video interviews 
+                leadership essence of founders through 2.5 hours of structured voice and text interviews 
                 spread across 5 days. Unlike traditional personality assessments, our system 
                 observes actual behavior patterns, communication styles, and decision-making 
                 processes to create a comprehensive leadership profile.
@@ -65,9 +65,9 @@ export default function CorePersonaDNAPage() {
                 <div className="grid md:grid-cols-3 gap-6">
                   <div className="text-center">
                     <div className="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span className="text-4xl text-white">🎥</span>
+                      <span className="text-4xl text-white">💬</span>
                     </div>
-                    <h4 className="font-semibold">5 Video Sessions</h4>
+                    <h4 className="font-semibold">5 Voice & Text Interview Sessions</h4>
                     <p className="text-sm text-gray-600 mt-2">30 minutes each, spread over 5 days</p>
                   </div>
                   <div className="text-center">
