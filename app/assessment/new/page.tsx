@@ -14,8 +14,8 @@ export default function NewAssessment() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: 'suryanarayanan@starthubbusiness.com',
-        company: 'StartHub MediaAI Pvt. Ltd.',
+        email: 'starthubbusiness@gmail.com',
+        company: 'StartHub MediaAI',
         name: 'Suryanarayanan',
         type: 'express',
         industry: 'AI/SaaS',
