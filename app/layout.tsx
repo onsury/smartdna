@@ -61,7 +61,7 @@ export default function RootLayout({
                 <Link href="/platform" className="text-gray-700 hover:text-blue-600 transition">
                   Platform
                 </Link>
-                <Link href="/assessment-selection" className="text-gray-700 hover:text-blue-600 transition">
+                <Link href="/pricing" className="text-gray-700 hover:text-blue-600 transition">
                   Assessment
                 </Link>
               </div>

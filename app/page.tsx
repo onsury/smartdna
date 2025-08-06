@@ -64,7 +64,7 @@ export default function Home() {
         {/* CTA Buttons */}
         <div className="flex gap-4 justify-center">
           <button
-            onClick={() => router.push('/assessment-selection')}
+            onClick={() => router.push('/assessment-tool')}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             className="bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
@@ -262,7 +262,7 @@ export default function Home() {
           <p className="text-xl mb-8">Join the revolution of Deep Neural Assessment-based organizational communication</p>
           <div className="flex gap-4 justify-center">
             <button
-              onClick={() => router.push('/assessment-selection')}
+              onClick={() => router.push('/assessment-tool')}
               className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-xl transform hover:-translate-y-1 transition"
             >
               Start Deep Neural Assessment

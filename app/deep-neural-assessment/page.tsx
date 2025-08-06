@@ -251,7 +251,7 @@ export default function DeepNeuralAssessmentPage() {
           <h3 className="text-2xl font-bold mb-6">Ready to Discover Your Organizational DNA?</h3>
           <div className="flex gap-4 justify-center">
             <button
-              onClick={() => router.push('/assessment-selection')}
+              onClick={() => router.push('/assessment-tool')}
               className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-xl transform hover:-translate-y-1 transition"
             >
               Start Your Assessment

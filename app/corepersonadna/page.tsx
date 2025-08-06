@@ -324,7 +324,7 @@ export default function CorePersonaDNAPage() {
           <h2 className="text-3xl font-bold mb-4">Ready to Discover Your CorePersonaDNA?</h2>
           <p className="text-xl mb-8">Join forward-thinking founders who are revolutionizing their organizational content</p>
           <button
-            onClick={() => router.push('/video-assessment')}
+            onClick={() => router.push('/assessment-tool')}
             className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transform hover:-translate-y-1 transition"
           >
             Start Your Assessment

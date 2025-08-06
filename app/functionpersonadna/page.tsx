@@ -304,7 +304,7 @@ export default function FunctionPersonaDNAPage() {
           <p className="text-xl mb-8">Experience the power of unified organizational communication</p>
           <div className="space-x-4">
             <button
-              onClick={() => router.push('/video-assessment')}
+              onClick={() => router.push('/assessment-tool')}
               className="bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-xl transform hover:-translate-y-1 transition"
             >
               Start Assessment

@@ -29,7 +29,7 @@ export default function MobileMenu() {
             <Link href="/platform" className="block py-2 text-gray-700 hover:text-blue-600" onClick={() => setIsOpen(false)}>
               Platform
             </Link>
-            <Link href="/assessment-selection" className="block py-2 text-gray-700 hover:text-blue-600" onClick={() => setIsOpen(false)}>
+            <Link href="/assessment-tool" className="block py-2 text-gray-700 hover:text-blue-600" onClick={() => setIsOpen(false)}>
               Assessment
             </Link>
           </div>
