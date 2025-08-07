@@ -110,7 +110,7 @@ export default function FunctionPersonaDNAPage() {
       benefits: [
         'Company announcements with unified voice',
         'Strategic plans reflecting full DNA',
-        'Cross-department consistency',
+        'Online Marketing strategy',
         'Stakeholder communications aligned'
       ],
       comparison: {

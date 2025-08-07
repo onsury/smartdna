@@ -62,7 +62,7 @@ export default function RootLayout({
                   Platform
                 </Link>
                 <Link href="/pricing" className="text-gray-700 hover:text-blue-600 transition">
-                  Assessment
+                  CorePersonaDNA Pricing
                 </Link>
               </div>
               

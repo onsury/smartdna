@@ -84,14 +84,14 @@ export default function PricingPage() {
           <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-8 relative">
             <h3 className="text-2xl font-bold mb-4">Express Assessment</h3>
             <div className="mb-6">
-              <span className="text-4xl font-bold text-blue-600">₹25,000</span>
+              <span className="text-4xl font-bold text-blue-600">₹45,000</span>
               <span className="text-gray-600 ml-2">one-time</span>
             </div>
             
             <div className="space-y-3 mb-8">
               <div className="flex items-start">
                 <Check className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                <span>5-minute voice/text assessment in any Indian language</span>
+                <span>45-minute voice/text assessment in any Indian language</span>
               </div>
               <div className="flex items-start">
                 <Check className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
@@ -129,14 +129,14 @@ export default function PricingPage() {
             
             <h3 className="text-2xl font-bold mb-4">Deep Assessment</h3>
             <div className="mb-6">
-              <span className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">₹50,000</span>
+              <span className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">₹90,000</span>
               <span className="text-gray-600 ml-2">one-time</span>
             </div>
             
             <div className="space-y-3 mb-8">
               <div className="flex items-start">
                 <Check className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                <span className="font-semibold">Everything in Express, plus:</span>
+                <span className="font-semibold">Each voice / text interview in over 10 Indian languages + English for 30 minutes x 5 rounds running to 2-1/2 hours duration on 5 different days, plus:</span>
               </div>
               <div className="flex items-start">
                 <Check className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />

@@ -53,7 +53,7 @@ export default function DeepNeuralAssessmentPage() {
           </ul>
           <p className="mt-3 text-gray-700">
             We use "DNA" as an acronym for "Deep Neural Assessment" - a purely AI-based 
-            analysis of communication and leadership patterns.
+            analysis of communication, behaviour and leadership patterns of organisational founders only.
           </p>
         </div>
 
@@ -72,7 +72,7 @@ export default function DeepNeuralAssessmentPage() {
             <div className="text-center p-6 bg-purple-50 rounded-lg">
               <h4 className="text-xl font-semibold mb-3 text-purple-800">NEURAL</h4>
               <p className="text-gray-700">
-                Advanced AI neural networks process video interviews to identify patterns in 
+                Advanced AI neural networks process Voice / Text interviews to identify patterns in 
                 communication style, emotional expression, and leadership approach
               </p>
             </div>
@@ -104,7 +104,7 @@ export default function DeepNeuralAssessmentPage() {
               <div>
                 <h4 className="text-xl font-semibold mb-2">Video-Based Behavioral Capture</h4>
                 <p className="text-gray-700">
-                  Through structured video interviews, we capture natural communication patterns, 
+                  Through structured Voice / Text interviews, we capture natural communication patterns, 
                   leadership expressions, and decision-making approaches. No questionnaires or 
                   self-reporting - just authentic conversation.
                 </p>
@@ -147,7 +147,7 @@ export default function DeepNeuralAssessmentPage() {
                 <h4 className="text-xl font-semibold mb-2">Content Generation</h4>
                 <p className="text-gray-700">
                   Every piece of content is then generated using this DNA profile, ensuring it sounds 
-                  exactly like the leader would write it - maintaining authentic voice across all 
+                  exactly like the leader would read / write / speak it - maintaining authentic voice across all 
                   organizational communication.
                 </p>
               </div>
@@ -212,10 +212,10 @@ export default function DeepNeuralAssessmentPage() {
           
           <div className="space-y-4 max-w-4xl mx-auto">
             <div className="bg-white rounded-lg p-6 shadow">
-              <h4 className="font-semibold mb-2">Is this related to genetic or biological DNA testing?</h4>
+              <h4 className="font-semibold mb-2">Is this related to genetic or intrusive biological DNA testing?</h4>
               <p className="text-gray-700">
                 No, absolutely not. Deep Neural Assessment (DNA) is purely an AI-based analysis of 
-                communication patterns. It has no connection to biological DNA, genetics, or healthcare.
+                communication patterns. It has no connection to any intrusive biological DNA, genetics, or healthcare.
               </p>
             </div>
             
@@ -223,7 +223,7 @@ export default function DeepNeuralAssessmentPage() {
               <h4 className="font-semibold mb-2">How is this different from personality tests?</h4>
               <p className="text-gray-700">
                 Unlike traditional personality tests that rely on self-reporting, DNA uses AI to 
-                analyze actual behavior through video interviews, capturing authentic patterns rather 
+                analyze actual behavior through Voice / Text interviews, capturing authentic patterns rather 
                 than perceived traits.
               </p>
             </div>
@@ -231,8 +231,8 @@ export default function DeepNeuralAssessmentPage() {
             <div className="bg-white rounded-lg p-6 shadow">
               <h4 className="font-semibold mb-2">Is my data secure?</h4>
               <p className="text-gray-700">
-                Yes, all video assessments are encrypted and processed securely. We never share your 
-                DNA profile or assessment data with third parties.
+                Yes, all Voice / Text assessments are encrypted and processed securely. We never share your 
+                DNA profile or assessment data with third parties. We share the final CorePersonaDNA report only to the founders of the organisation.
               </p>
             </div>
             

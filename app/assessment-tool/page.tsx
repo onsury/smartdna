@@ -65,35 +65,43 @@ export default function AssessmentTool() {
   };
 
   const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mediaRecorder = new MediaRecorder(stream);
+    mediaRecorderRef.current = mediaRecorder;
+    audioChunksRef.current = []; // Clear previous recordings
 
-      mediaRecorder.ondataavailable = (event) => {
+    // CRITICAL: Set up data collection BEFORE starting
+    mediaRecorder.ondataavailable = (event) => {
+      console.log('Data chunk received, size:', event.data.size);
+      if (event.data.size > 0) {
         audioChunksRef.current.push(event.data);
-      };
+      }
+    };
 
-      mediaRecorder.start();
-      setIsRecording(true);
-      setRecordingTime(0);
+    mediaRecorder.onstop = () => {
+      console.log('Recording stopped. Total chunks:', audioChunksRef.current.length);
+    };
 
-      timerRef.current = setInterval(() => {
-        setRecordingTime((prev) => {
-          if (prev >= 59) {
-            stopRecording();
-            return 60;
-          }
-          return prev + 1;
-        });
-      }, 1000);
-    } catch (error) {
-      console.error('Error accessing microphone:', error);
-      setError('Microphone access denied. Please allow microphone access and try again.');
-    }
-  };
+    // Start recording with timeslice to ensure data is collected
+    mediaRecorder.start(1000); // Collect data every 1 second
+    setIsRecording(true);
+    setRecordingTime(0);
 
+    timerRef.current = setInterval(() => {
+      setRecordingTime((prev) => {
+        if (prev >= 59) {
+          stopRecording();
+          return 60;
+        }
+        return prev + 1;
+      });
+    }, 1000);
+  } catch (error) {
+    console.error('Error accessing microphone:', error);
+    setError('Microphone access denied. Please allow microphone access and try again.');
+  }
+};
   const stopRecording = () => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
@@ -329,7 +337,13 @@ export default function AssessmentTool() {
                   </button>
                 </div>
               </div>
-
+<button
+  type="button"
+  onClick={() => console.log('Audio chunks:', audioChunksRef.current.length)}
+  className="mt-2 text-sm text-gray-600 underline"
+>
+  Debug: Check Audio Chunks
+</button>
               {selectedMode === 'voice' ? (
                 <div className="bg-purple-50 rounded-lg p-6 text-center">
                   <h3 className="font-semibold mb-2">Voice Recording</h3>
