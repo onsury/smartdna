@@ -1,76 +1,60 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function InterviewChat() {
+// Separate component that uses useSearchParams
+function InterviewChatContent() {
   const searchParams = useSearchParams();
-  const sessionId = searchParams.get('session');
-  const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Welcome! Tell me about your vision for StartHub MediaAI. What inspired you to create this platform?' }
+  const [messages, setMessages] = useState<Array<{role: string, content: string}>>([
+    { role: 'assistant', content: 'Hello! I\'m your AI interviewer. Tell me about your business and what challenges you face.' }
   ]);
   const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   const sendMessage = async () => {
-    if (!input.trim() || loading) return;
+    if (!input.trim()) return;
     
-    const userMessage = input;
+    setMessages(prev => [...prev, { role: 'user', content: input }]);
     setInput('');
-    const updatedMessages = [...messages, { role: 'user', content: userMessage }];
-    setMessages(updatedMessages);
-    setLoading(true);
-    
+    setIsLoading(true);
+
     try {
       const response = await fetch('/api/interview/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId,
-          message: userMessage,
-          messages: updatedMessages
+        body: JSON.stringify({ 
+          message: input,
+          history: messages 
         })
       });
       
       const data = await response.json();
-      
-      if (data.success) {
-        setMessages([...updatedMessages, { 
-          role: 'assistant', 
-          content: data.response 
-        }]);
-      } else {
-        console.error('Chat error:', data.error);
-      }
+      setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Chat error:', error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
-  
+
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow p-6">
-        <h1 className="text-2xl font-bold mb-4">CorePersonaDNA Interview</h1>
-        <p className="text-sm text-gray-600 mb-4">Session: {sessionId}</p>
-        
-        <div className="h-96 overflow-y-auto mb-4 p-4 border rounded">
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">AI Interview Assessment</h1>
+      
+      <div className="bg-white rounded-lg shadow-lg p-6 h-[500px] flex flex-col">
+        <div className="flex-1 overflow-y-auto space-y-4 mb-4">
           {messages.map((msg, i) => (
             <div key={i} className={`mb-4 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-              <div className={`inline-block p-3 rounded-lg max-w-2xl ${
-                msg.role === 'user' 
-                  ? 'bg-blue-600 text-white' 
-                  : 'bg-gray-100 text-gray-800'
+              <div className={`inline-block p-3 rounded-lg ${
+                msg.role === 'user' ? 'bg-blue-100' : 'bg-gray-100'
               }`}>
-                <strong>{msg.role}:</strong> {msg.content}
+                {msg.content}
               </div>
             </div>
           ))}
-          {loading && (
-            <div className="text-center text-gray-500">
-              <div>Claude is thinking...</div>
-            </div>
+          {isLoading && (
+            <div className="text-gray-500">AI is thinking...</div>
           )}
         </div>
         
@@ -80,19 +64,32 @@ export default function InterviewChat() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-            className="flex-1 p-2 border rounded"
-            placeholder="Type your response..."
-            disabled={loading}
+            placeholder="Type your message..."
+            className="flex-1 p-2 border rounded-lg"
+            disabled={isLoading}
           />
-          <button 
+          <button
             onClick={sendMessage}
-            disabled={loading || !input.trim()}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+            disabled={isLoading || !input.trim()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg disabled:opacity-50"
           >
-            {loading ? 'Sending...' : 'Send'}
+            Send
           </button>
         </div>
       </div>
     </div>
+  );
+}
+
+// Main component with Suspense wrapper
+export default function InterviewChat() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-4xl mx-auto p-6">
+        <div className="text-center">Loading interview chat...</div>
+      </div>
+    }>
+      <InterviewChatContent />
+    </Suspense>
   );
 }
