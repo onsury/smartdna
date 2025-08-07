@@ -1,0 +1,19 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico",
+  "/assessment-selection/page": "/assessment-selection",
+  "/assessment-tool/page": "/assessment-tool",
+  "/assessment/new/page": "/assessment/new",
+  "/assessment/page": "/assessment",
+  "/corepersonadna/page": "/corepersonadna",
+  "/deep-neural-assessment/page": "/deep-neural-assessment",
+  "/functionpersonadna/page": "/functionpersonadna",
+  "/interview-chat/page": "/interview-chat",
+  "/page": "/",
+  "/platform/[hub]/generate/page": "/platform/[hub]/generate",
+  "/platform/[hub]/page": "/platform/[hub]",
+  "/platform/page": "/platform",
+  "/results/page": "/results",
+  "/test-interview/page": "/test-interview",
+  "/video-assessment/page": "/video-assessment"
+}

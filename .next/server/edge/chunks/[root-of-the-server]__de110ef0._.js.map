@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 21, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/middleware.ts"],"sourcesContent":["import { NextResponse } from 'next/server';\nimport type { NextRequest } from 'next/server';\n\nexport async function middleware(req: NextRequest) {\n  // Skip all authentication for now\n  return NextResponse.next();\n}\n\nexport const config = {\n  matcher: ['/platform/:path*', '/dashboard/:path*', '/assessment/:path*'],\n};"],"names":[],"mappings":";;;;AAAA;AAAA;;AAGO,eAAe,WAAW,GAAgB;IAC/C,kCAAkC;IAClC,OAAO,6LAAA,CAAA,eAAY,CAAC,IAAI;AAC1B;AAEO,MAAM,SAAS;IACpB,SAAS;QAAC;QAAoB;QAAqB;KAAqB;AAC1E"}}]
+}

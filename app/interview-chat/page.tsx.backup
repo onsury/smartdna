@@ -1,0 +1,55 @@
+
+'use client';
+
+import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+
+export default function InterviewChat() {
+  const searchParams = useSearchParams();
+  const sessionId = searchParams.get('session');
+  const [messages, setMessages] = useState([
+    { role: 'assistant', content: 'Welcome! Tell me about your vision for StartHub MediaAI.' }
+  ]);
+  const [input, setInput] = useState('');
+  
+  const sendMessage = () => {
+    if (input.trim()) {
+      setMessages([...messages, { role: 'user', content: input }]);
+      setInput('');
+    }
+  };
+  
+  return (
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow p-6">
+        <h1 className="text-2xl font-bold mb-4">CorePersonaDNA Interview</h1>
+        <p className="text-sm text-gray-600 mb-4">Session: {sessionId}</p>
+        
+        <div className="h-96 overflow-y-auto mb-4 p-4 border rounded">
+          {messages.map((msg, i) => (
+            <div key={i} className="mb-3">
+              <strong>{msg.role}:</strong> {msg.content}
+            </div>
+          ))}
+        </div>
+        
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+            className="flex-1 p-2 border rounded"
+            placeholder="Type your response..."
+          />
+          <button 
+            onClick={sendMessage}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
